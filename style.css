@@ -1,3 +1,33 @@
+.main-nav {
+    background-color: #d9534f;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.main-nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: inline-block;
+}
+
+.main-nav li {
+    display: inline-block;
+    margin: 0 10px;
+}
+
+.main-nav a {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.main-nav a.active,
+.main-nav a:hover {
+    background-color: #c9302c;
+}
+
 :root {
     --primary-color: #2d3436;
     --accent-color: #00b894;
