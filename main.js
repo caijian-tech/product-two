@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('블로그 시스템 초기화됨');
     const postForm = document.getElementById('post-form');
     const postsContainer = document.getElementById('posts-container');
     const titleInput = document.getElementById('post-title');
