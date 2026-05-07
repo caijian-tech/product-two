@@ -1,50 +1,234 @@
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    color: #333;
+:root {
+    --primary-color: #2d3436;
+    --accent-color: #00b894;
+    --bg-gradient: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+    --card-bg: rgba(255, 255, 255, 0.9);
+    --text-main: #2d3436;
+    --text-muted: #636e72;
+    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.05);
+    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-.intro-card {
-    background: white;
-    padding: 3rem;
-    border-radius: 20px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-    text-align: center;
-    max-width: 400px;
-    animation: fadeIn 0.8s ease-out;
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: var(--bg-gradient);
+    color: var(--text-main);
+    min-height: 100vh;
+    line-height: 1.6;
 }
+
+.container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+header h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(to right, #2d3436, #00b894);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+header p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    font-weight: 300;
+}
+
+.card {
+    background: var(--card-bg);
+    padding: 2.5rem;
+    border-radius: 24px;
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 3rem;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 2rem;
+    position: relative;
+    display: inline-block;
+}
+
+h2::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background: var(--accent-color);
+    border-radius: 2px;
+}
+
+/* Form Styles */
+#post-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+input[type="text"], textarea, select {
+    width: 100%;
+    padding: 1.2rem;
+    border: 1px solid #dfe6e9;
+    border-radius: 16px;
+    font-family: inherit;
+    font-size: 1rem;
+    background: #fcfcfc;
+    transition: var(--transition);
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23636e72' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.2rem;
+    cursor: pointer;
+}
+
+input[type="text"]:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(0, 184, 148, 0.1);
+}
+
+button {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 1.2rem;
+    border-radius: 16px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-top: 0.5rem;
+}
+
+button:hover {
+    background: #000;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* Post Card Styles */
+.post-card {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 24px;
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 2rem;
+    transition: var(--transition);
+    position: relative;
+    border: 1px solid transparent;
+}
+
+.post-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    border-color: rgba(0, 184, 148, 0.2);
+}
+
+.post-card h3 {
+    font-size: 1.8rem;
+    margin-top: 0;
+    margin-bottom: 0.8rem;
+    color: var(--text-main);
+    line-height: 1.3;
+}
+
+.post-date {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    display: block;
+    font-weight: 400;
+}
+
+.post-content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #444;
+    white-space: pre-wrap;
+}
+
+.delete-btn {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    background: none;
+    border: none;
+    color: #fab1a0;
+    cursor: pointer;
+    padding: 5px;
+    font-size: 0.8rem;
+    font-weight: 400;
+    margin-top: 0;
+    transition: color 0.2s;
+}
+
+.delete-btn:hover {
+    color: #ff7675;
+    background: none;
+    box-shadow: none;
+    transform: none;
+}
+
+/* Category Tags */
+.category-tag {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.tag-gourmet { background-color: #ffeaa7; color: #d6a312; }
+.tag-shopping { background-color: #fab1a0; color: #e17055; }
+.tag-drive { background-color: #81ecec; color: #00cec9; }
+.tag-default { background-color: #dfe6e9; color: #636e72; }
 
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    color: #2d3436;
+#posts-container > div {
+    animation: fadeIn 0.6s ease-out both;
 }
 
-p {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    margin-bottom: 2rem;
-    color: #636e72;
-}
-
-.links a {
-    text-decoration: none;
-    color: #0984e3;
-    margin: 0 10px;
-    font-weight: 600;
-    transition: color 0.2s;
-}
-
-.links a:hover {
-    color: #74b9ff;
+@media (max-width: 600px) {
+    .container {
+        padding: 2rem 1rem;
+    }
+    header h1 {
+        font-size: 2.2rem;
+    }
+    .post-card {
+        padding: 1.5rem;
+    }
 }
