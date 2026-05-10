@@ -97,4 +97,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial render
     renderPosts();
+
+    // Fetch USD to KRW exchange rate
+    async function fetchExchangeRate() {
+        const rateValue = document.querySelector('.rate-value');
+        try {
+            // Using a more reliable open API (ExchangeRate.host or similar)
+            const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+            if (!response.ok) throw new Error('Network response was not ok');
+            const data = await response.json();
+            const rate = data.rates.KRW;
+            if (rateValue) {
+                rateValue.textContent = `₩${rate.toLocaleString('ko-KR', { minimumFractionDigits: 2 })}`;
+            }
+        } catch (error) {
+            console.error('환율 정보를 가져오는데 실패했습니다:', error);
+            // Fallback to another API if the first one fails
+            try {
+                const fallbackRes = await fetch('https://open.er-api.com/v6/latest/USD');
+                const fallbackData = await fallbackRes.json();
+                const fallbackRate = fallbackData.rates.KRW;
+                if (rateValue) {
+                    rateValue.textContent = `₩${fallbackRate.toLocaleString('ko-KR', { minimumFractionDigits: 2 })}`;
+                }
+            } catch (fallbackError) {
+                if (rateValue) rateValue.textContent = '연결 오류';
+            }
+        }
+    }
+
+    fetchExchangeRate();
+    // Refresh every 10 minutes
+    setInterval(fetchExchangeRate, 600000);
 });

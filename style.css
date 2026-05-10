@@ -1,7 +1,12 @@
 .main-nav {
-    background-color: #d9534f;
-    padding: 10px 0;
+    background-color: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 15px 0;
     text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 .main-nav ul {
@@ -17,25 +22,29 @@
 }
 
 .main-nav a {
-    color: white;
+    color: #e2e8f0;
     text-decoration: none;
-    padding: 10px;
+    padding: 10px 16px;
     font-size: 16px;
+    font-weight: 500;
+    border-radius: 12px;
+    transition: var(--transition);
 }
 
 .main-nav a.active,
 .main-nav a:hover {
-    background-color: #c9302c;
+    background-color: rgba(168, 85, 247, 0.2);
+    color: #c084fc;
 }
 
 :root {
-    --primary-color: #2d3436;
-    --accent-color: #00b894;
-    --bg-gradient: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
-    --card-bg: rgba(255, 255, 255, 0.9);
-    --text-main: #2d3436;
-    --text-muted: #636e72;
-    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.05);
+    --primary-color: #a855f7;
+    --accent-color: #3b82f6;
+    --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+    --card-bg: rgba(30, 41, 59, 0.6);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --shadow-soft: 0 10px 40px rgba(0, 0, 0, 0.4);
     --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
@@ -58,15 +67,47 @@ body {
 header {
     text-align: center;
     margin-bottom: 4rem;
+    position: relative;
+}
+
+.exchange-rate {
+    position: absolute;
+    top: 70px;
+    right: 0;
+    background: rgba(168, 85, 247, 0.1);
+    padding: 10px 15px;
+    border-radius: 16px;
+    border: 1px solid rgba(168, 85, 247, 0.2);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.8s ease-out;
+}
+
+.rate-label {
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+}
+
+.rate-value {
+    color: #facc15;
+    font-weight: 800;
+    font-size: 1.2rem;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
 }
 
 header h1 {
     font-size: 2.8rem;
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: -1px;
     margin-bottom: 0.5rem;
-    color: var(--primary-color);
-    background: linear-gradient(to right, #2d3436, #00b894);
+    background: linear-gradient(to right, var(--primary-color), var(--accent-color));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -83,8 +124,8 @@ header p {
     border-radius: 24px;
     box-shadow: var(--shadow-soft);
     margin-bottom: 3rem;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 h2 {
@@ -94,6 +135,7 @@ h2 {
     margin-bottom: 2rem;
     position: relative;
     display: inline-block;
+    color: var(--text-main);
 }
 
 h2::after {
@@ -103,8 +145,9 @@ h2::after {
     left: 0;
     width: 40px;
     height: 3px;
-    background: var(--accent-color);
+    background: var(--primary-color);
     border-radius: 2px;
+    box-shadow: 0 0 10px var(--primary-color);
 }
 
 /* Form Styles */
@@ -117,11 +160,12 @@ h2::after {
 input[type="text"], textarea, select {
     width: 100%;
     padding: 1.2rem;
-    border: 1px solid #dfe6e9;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 16px;
     font-family: inherit;
     font-size: 1rem;
-    background: #fcfcfc;
+    background: rgba(15, 23, 42, 0.5);
+    color: var(--text-main);
     transition: var(--transition);
     box-sizing: border-box;
     -webkit-appearance: none;
@@ -129,56 +173,66 @@ input[type="text"], textarea, select {
     appearance: none;
 }
 
+input[type="text"]::placeholder, textarea::placeholder {
+    color: var(--text-muted);
+}
+
 select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23636e72' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
     background-repeat: no-repeat;
-    background-position: right 1rem center;
+    background-position: right 1.2rem center;
     background-size: 1.2rem;
     cursor: pointer;
 }
 
+select option {
+    background: #1e293b;
+    color: #f8fafc;
+}
+
 input[type="text"]:focus, textarea:focus, select:focus {
     outline: none;
-    border-color: var(--accent-color);
-    background: white;
-    box-shadow: 0 0 0 4px rgba(0, 184, 148, 0.1);
+    border-color: var(--primary-color);
+    background: rgba(15, 23, 42, 0.8);
+    box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.15);
 }
 
 button {
-    background: var(--primary-color);
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
     color: white;
     border: none;
     padding: 1.2rem;
     border-radius: 16px;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 1rem;
+    letter-spacing: 0.5px;
     cursor: pointer;
     transition: var(--transition);
     margin-top: 0.5rem;
 }
 
 button:hover {
-    background: #000;
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 20px rgba(168, 85, 247, 0.3);
 }
 
 /* Post Card Styles */
 .post-card {
-    background: white;
+    background: var(--card-bg);
     padding: 2.5rem;
     border-radius: 24px;
     box-shadow: var(--shadow-soft);
     margin-bottom: 2rem;
     transition: var(--transition);
     position: relative;
-    border: 1px solid transparent;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
 }
 
 .post-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-    border-color: rgba(0, 184, 148, 0.2);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    border-color: rgba(168, 85, 247, 0.3);
 }
 
 .post-card h3 {
@@ -200,48 +254,49 @@ button:hover {
 .post-content {
     font-size: 1.1rem;
     line-height: 1.8;
-    color: #444;
+    color: #cbd5e1;
     white-space: pre-wrap;
 }
 
 .delete-btn {
     position: absolute;
-    top: 2rem;
-    right: 2rem;
-    background: none;
-    border: none;
-    color: #fab1a0;
+    top: 2.2rem;
+    right: 2.2rem;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 8px;
+    color: #ef4444;
     cursor: pointer;
-    padding: 5px;
+    padding: 6px 10px;
     font-size: 0.8rem;
-    font-weight: 400;
+    font-weight: 600;
     margin-top: 0;
-    transition: color 0.2s;
+    transition: var(--transition);
 }
 
 .delete-btn:hover {
-    color: #ff7675;
-    background: none;
-    box-shadow: none;
+    background: #ef4444;
+    color: white;
     transform: none;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
 }
 
 /* Category Tags */
 .category-tag {
     display: inline-block;
-    padding: 0.4rem 1rem;
+    padding: 0.5rem 1rem;
     border-radius: 50px;
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 700;
     margin-bottom: 1rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
-.tag-gourmet { background-color: #ffeaa7; color: #d6a312; }
-.tag-shopping { background-color: #fab1a0; color: #e17055; }
-.tag-drive { background-color: #81ecec; color: #00cec9; }
-.tag-default { background-color: #dfe6e9; color: #636e72; }
+.tag-gourmet { background-color: rgba(250, 204, 21, 0.15); color: #facc15; border: 1px solid rgba(250, 204, 21, 0.3); }
+.tag-shopping { background-color: rgba(244, 63, 94, 0.15); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.3); }
+.tag-drive { background-color: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+.tag-default { background-color: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.3); }
 
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
@@ -249,7 +304,7 @@ button:hover {
 }
 
 #posts-container > div {
-    animation: fadeIn 0.6s ease-out both;
+    animation: fadeIn 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) both;
 }
 
 @media (max-width: 600px) {
@@ -259,7 +314,7 @@ button:hover {
     header h1 {
         font-size: 2.2rem;
     }
-    .post-card {
+    .post-card, .card {
         padding: 1.5rem;
     }
 }
