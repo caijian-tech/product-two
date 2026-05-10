@@ -23,13 +23,27 @@
                     <li><a href="ranking.html">排行</a></li>
                 </ul>
             </nav>
-            <div class="exchange-rate" id="exchange-rate">
+            <div class="exchange-rate" id="exchange-rate" title="최근 10년 환율 보기">
                 <span class="rate-label">USD/KRW</span>
                 <span class="rate-value">--</span>
             </div>
             <h1>나의 심플 블로그</h1>
             <p>당신의 생각과 아이디어를 세상과 공유하세요.</p>
         </header>
+
+        <!-- Historical Rate Modal -->
+        <div id="history-modal" class="modal">
+            <div class="modal-content card">
+                <div class="modal-header">
+                    <h2>USD/KRW 10년 역사</h2>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div id="history-chart-container">
+                    <div class="loading-spinner">데이터를 불러오는 중...</div>
+                </div>
+                <div class="history-list" id="history-list"></div>
+            </div>
+        </div>
 
         <section class="create-post">
             <div class="card">
