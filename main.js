@@ -5,6 +5,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const titleInput = document.getElementById('post-title');
     const contentInput = document.getElementById('post-content');
     const categoryInput = document.getElementById('post-category');
+    
+    // Modal elements
+    const exchangeRateEl = document.getElementById('exchange-rate');
+    const modal = document.getElementById('history-modal');
+    const closeModal = document.querySelector('.close-modal');
+    const historyList = document.getElementById('history-list');
+    const chartContainer = document.getElementById('history-chart-container');
 
     // Load posts from Local Storage
     let posts = JSON.parse(localStorage.getItem('blog-posts')) || [];
@@ -98,35 +105,118 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial render
     renderPosts();
 
-    // Fetch USD to KRW exchange rate
+    // Fetch USD and CNY to KRW exchange rates
     async function fetchExchangeRate() {
-        const rateValue = document.querySelector('.rate-value');
+        const usdRateValue = document.getElementById('usd-rate');
+        const cnyRateValue = document.getElementById('cny-rate');
+        
         try {
-            // Using a more reliable open API (ExchangeRate.host or similar)
             const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
             if (!response.ok) throw new Error('Network response was not ok');
             const data = await response.json();
-            const rate = data.rates.KRW;
-            if (rateValue) {
-                rateValue.textContent = `₩${rate.toLocaleString('ko-KR', { minimumFractionDigits: 2 })}`;
+            
+            const usdToKrw = data.rates.KRW;
+            const usdToCny = data.rates.CNY;
+            const cnyToKrw = usdToKrw / usdToCny;
+
+            if (usdRateValue) {
+                usdRateValue.textContent = `₩${usdToKrw.toLocaleString('ko-KR', { minimumFractionDigits: 2 })}`;
+            }
+            if (cnyRateValue) {
+                cnyRateValue.textContent = `₩${cnyToKrw.toLocaleString('ko-KR', { minimumFractionDigits: 2 })}`;
             }
         } catch (error) {
             console.error('환율 정보를 가져오는데 실패했습니다:', error);
-            // Fallback to another API if the first one fails
             try {
                 const fallbackRes = await fetch('https://open.er-api.com/v6/latest/USD');
                 const fallbackData = await fallbackRes.json();
-                const fallbackRate = fallbackData.rates.KRW;
-                if (rateValue) {
-                    rateValue.textContent = `₩${fallbackRate.toLocaleString('ko-KR', { minimumFractionDigits: 2 })}`;
+                
+                const usdToKrw = fallbackData.rates.KRW;
+                const usdToCny = fallbackData.rates.CNY;
+                const cnyToKrw = usdToKrw / usdToCny;
+
+                if (usdRateValue) {
+                    usdRateValue.textContent = `₩${usdToKrw.toLocaleString('ko-KR', { minimumFractionDigits: 2 })}`;
+                }
+                if (cnyRateValue) {
+                    cnyRateValue.textContent = `₩${cnyToKrw.toLocaleString('ko-KR', { minimumFractionDigits: 2 })}`;
                 }
             } catch (fallbackError) {
-                if (rateValue) rateValue.textContent = '연결 오류';
+                if (usdRateValue) usdRateValue.textContent = '연결 오류';
+                if (cnyRateValue) cnyRateValue.textContent = '연결 오류';
             }
         }
     }
 
     fetchExchangeRate();
-    // Refresh every 10 minutes
     setInterval(fetchExchangeRate, 600000);
+
+    // Historical Rates Logic - Attach to USD Box
+    const usdBox = document.getElementById('usd-box');
+    if (usdBox) {
+        usdBox.addEventListener('click', () => {
+            modal.style.display = 'block';
+            fetchHistoricalRates();
+        });
+    }
+
+    closeModal.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    });
+
+    async function fetchHistoricalRates() {
+        historyList.innerHTML = '';
+        chartContainer.innerHTML = '<div class="loading-spinner">최근 10년 데이터를 분석 중...</div>';
+        
+        const years = [];
+        const currentYear = new Date().getFullYear();
+        for (let i = 0; i < 10; i++) {
+            years.push(currentYear - i);
+        }
+
+        try {
+            // Fetching year-end rates for the last 10 years using Frankfurter API
+            const historyData = [];
+            
+            // To be efficient, we fetch in parallel
+            const fetchPromises = years.map(year => 
+                fetch(`https://api.frankfurter.app/${year}-12-31?from=USD&to=KRW`)
+                .then(res => res.json())
+                .catch(() => null)
+            );
+
+            const results = await Promise.all(fetchPromises);
+            
+            chartContainer.innerHTML = ''; // Clear spinner
+            
+            results.forEach((data, index) => {
+                if (data && data.rates && data.rates.KRW) {
+                    const rate = data.rates.KRW;
+                    const year = years[index];
+                    
+                    const item = document.createElement('div');
+                    item.className = 'history-item';
+                    item.innerHTML = `
+                        <span class="history-year">${year}년 말</span>
+                        <span class="history-rate">₩${rate.toFixed(1)}</span>
+                    `;
+                    historyList.appendChild(item);
+                    historyData.push({ year, rate });
+                }
+            });
+
+            if (historyData.length === 0) {
+                chartContainer.innerHTML = '<div class="loading-spinner">데이터를 불러올 수 없습니다.</div>';
+            }
+        } catch (error) {
+            console.error('역사적 환율 데이터 fetch 실패:', error);
+            chartContainer.innerHTML = '<div class="loading-spinner">데이터 로드 오류 발생</div>';
+        }
+    }
 });

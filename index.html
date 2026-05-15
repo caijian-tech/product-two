@@ -23,9 +23,15 @@
                     <li><a href="ranking.html">排行</a></li>
                 </ul>
             </nav>
-            <div class="exchange-rate" id="exchange-rate" title="최근 10년 환율 보기">
-                <span class="rate-label">USD/KRW</span>
-                <span class="rate-value">--</span>
+            <div class="exchange-rate-container">
+                <div class="exchange-rate-box" id="usd-box" title="USD/KRW 환율 (클릭하여 역사 보기)">
+                    <span class="rate-label">USD/KRW</span>
+                    <span class="rate-value" id="usd-rate">--</span>
+                </div>
+                <div class="exchange-rate-box" id="cny-box" title="CNY/KRW 환율">
+                    <span class="rate-label">CNY/KRW</span>
+                    <span class="rate-value" id="cny-rate">--</span>
+                </div>
             </div>
             <h1>나의 심플 블로그</h1>
             <p>당신의 생각과 아이디어를 세상과 공유하세요.</p>
